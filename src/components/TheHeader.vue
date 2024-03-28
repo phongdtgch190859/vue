@@ -1,7 +1,7 @@
 <template>
     <v-container>
         <v-row class="header d-flex  ">
-            <v-col class="header_left w-50 d-flex">
+            <v-col class="header_left d-flex">
 
                 <img src="../assets/images/Logo.png" alt="">
                 <div class="search-input">
@@ -11,7 +11,7 @@
                 </div>
 
             </v-col>
-            <v-col class="header_right w-50  ga-4  align-content-center">
+            <v-col class="header_right ga-4  align-content-center">
                 <div class="header_right--icons d-flex ">
                     <img src="../assets/images/Bag2.png" alt="">
                     <img src="../assets/images/Heart.png" alt="">
@@ -19,20 +19,17 @@
                 <button class="outlined">Sign In</button>
                 <button class="Tonal">Sign Up</button>
                 <div class="header_right-user d-flex">
-                    <div class="header_right-user-info  ">
-                        <p>Name</p>
-                        <p>Description</p>
+                    <div class="header_right-user-info">
+                        <h3>Name</h3>
+                        <span>Description</span>
                     </div>
-                    <img src="../assets/images/Avatar.png" alt="">
+                    <div class="header_right-user-avatar">
+                        <img src="../assets/images/Avatar.png" alt="">
+                    </div>
                 </div>
                 <div class="switch">
-                    <input type="checkbox" id="dayNightSwitch" v-model="isNight" @change="toggleDayNight">
-                    <label class="switch-background" for="dayNightSwitch">
-                        <img src="../assets/images/Frame1.png" alt="">
-                        <div class="switch-button" :class="{ 'night': !isDay }">
-                            <img src="../assets/images/Frame2.png" alt="">
-                        </div>
-                    </label>
+                    <img src="../assets/images/Frame1.png" alt="">
+                    <div class="switch__top"></div>
                 </div>
 
             </v-col>
@@ -59,14 +56,17 @@ export default defineComponent({
 </script>
 <style>
 .header {
-    height: 4.6rem;
-    padding: 0.6rem;
-    margin: 0 auto;
+    height: 74px;
+
+    margin: 25px 20px;
+
+    justify-content: space-between;
 }
 
 .header_left {
     gap: 15px;
     align-items: center;
+    width: 30%;
 }
 
 .header_left img {
@@ -77,14 +77,19 @@ export default defineComponent({
 .search-input {
     position: relative;
     height: 3.5rem;
-    width: 60%;
+    display: inline-block;
     display: flex;
-    border: 1px solid #D7D7D7;
-    border-radius: 25px;
+    width: 90%;
+    align-items: center;
 }
 
 .search-input input[type="text"] {
     padding-left: 35px;
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    border: 1px solid #D7D7D7;
+    border-radius: 25px;
     /* Để chỗ cho biểu tượng search */
 }
 
@@ -99,16 +104,17 @@ export default defineComponent({
 
 .header_right {
     display: flex;
-    margin: 0 auto;
+    width: 60%;
     gap: 15px;
-    justify-content: flex-end;
+    justify-content: end;
+    align-items: center;
 }
 
 .header_right--icons {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: calc(10% - 15px)
+    width: calc(8% - 15px)
 }
 
 .header_right button {
@@ -134,48 +140,61 @@ export default defineComponent({
     display: block;
 }
 
+.header_right-user-avatar {
+    width: 40%;
+    height: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.header_right-user-avatar img {
+    width: 50%;
+    height: 70%;
+}
+
+.header_right-user {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: 20%;
+}
+
+.header_right-user-info span {
+    font-size: 12px;
+    font-weight: 300;
+    line-height: 16px;
+}
+
+.header_right-user-info h3 {
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 16px;
+}
+
 .switch {
     display: inline-block;
     position: relative;
+    margin-top: 5px;
 
 }
 
-.switch input[type="checkbox"] {
-    display: none;
-}
-
-.switch .switch-background {
-    position: relative;
-    display: block;
+.switch img {
     width: 100%;
-    /* Kích thước của phần nền */
     height: 100%;
-    /* Kích thước của phần nền */
+
 }
 
-.switch .switch-background img {
-    width: 50%;
-    height: 100%;
-}
 
-.switch .switch-button {
+
+.switch__top {
     position: absolute;
-    top: 0;
-    right: 0;
-    width: 70%;
-    /* Kích thước của phần switch */
+    top: -4px;
+    right: -4px;
+    width: 80%;
     height: 100%;
-    /* Kích thước của phần switch */
-    transition: transform 0.3s ease;
-}
-
-.switch .switch-button img {
-    width: 100%;
-    height: 100%;
-}
-
-.switch .switch-button.night {
-    transform: translateX(50px);
-    /* Di chuyển phần switch sang phải */
+    background-image: url("../assets/images/Frame2.png");
+    background-size: cover;
 }
 </style>
