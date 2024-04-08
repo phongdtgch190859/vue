@@ -5,43 +5,18 @@
                 <h1>FEATURES</h1>
             </div>
             <div class="features">
-                <div v-for="(card, index,) in features" :key="index" class="card" v-show="card.isVisible">
-                    <div class="card__top">
-                        <div class="card__image">
-                            <img src="../assets/images/Item1.png" alt="">
-                        </div>
-                        <div class="card__action">
-                            <div class="card__action-left">
-                                <img src="../assets/images/Heart.png" alt="">
-                            </div>
-                            <div class="card__action-right">
-                                <img src="../assets/images/Bag2.png" alt="">
-                            </div>
-
-                        </div>
-                    </div>
-                    <div class="card__bottom">
-                        <div class="card__bottom__color">
-                            <img class=".card__bottom__color--green" src="../assets/images/LightGreen.png" alt="">
-                            <img class=".card__bottom__color--pink" src="../assets/images/LightPink.png" alt="">
-                            <img class=".card__bottom__color--black" src="../assets/images/Black.png" alt="">
-                        </div>
-                        <div class="card__bottom__info">
-                            <h3>{{ card.name }}</h3>
-                            <p>Price: <span>$ {{ card.price }}</span></p>
-                        </div>
-                    </div>
-                </div>
+                <TheCart v-for="(card, index) in features" :key="index" :card="card">
+                </TheCart>
             </div>
-            <div @click="plusSlides(-1)" class="arrow__left">
+            <div @click="plusSlides(-3)" class="arrow__left">
                 <img src="../assets/images/ArrowLeft.png" alt="">
             </div>
-            <div @click="plusSlides(1)" class="arrow__right">
+            <div @click="plusSlides(3)" class="arrow__right">
                 <img src="../assets/images/ArrowRight.png" alt="">
             </div>
             <div class="rectangles">
-                <div v-for="(dot, index) in numberOfDots" :key="index" @click="currentSlide(index * 4)"
-                    :class="slideIndex >= index * 4 && slideIndex < Math.min((index + 1) * 4, features.length) ? 'active' : 'rectangles__item'">
+                <div v-for="(dot, index) in numberOfDots" :key="index" @click="currentSlide(index + 4)"
+                    :class="slideIndex / 4 == index + 1 ? 'active' : 'rectangles__item'">
                 </div>
             </div>
 
@@ -51,13 +26,15 @@
 
 <script>
 import { defineComponent, ref } from "vue";
-
+import TheCart from "./TheCart.vue";
 export default defineComponent({
     name: "TheFeatures",
-
+    components: {
+        TheCart,
+    },
     data() {
         return {
-            slideIndex: ref(0),
+            slideIndex: 0,
             timeoutId: null,
 
             features: [
@@ -96,7 +73,19 @@ export default defineComponent({
                     image: "../assets/images/Item6.png",
                     name: "Under Armour",
                     price: 150
-                }
+                },
+                {
+                    isVisible: true,
+                    image: "../assets/images/Item1.png",
+                    name: "Jordan1",
+                    price: 500
+                },
+                {
+                    isVisible: false,
+                    image: "../assets/images/Item2.png",
+                    name: "Nike2",
+                    price: 400
+                },
             ]
         }
     },
@@ -104,67 +93,68 @@ export default defineComponent({
         numberOfDots() {
             let numberOfDots = [];
             const itemsPerGroup = 4; // Số lượng phần tử muốn hiển thị trong mỗi vòng
-            for (let i = 0; i < this.features.length; i++) {
-                if (i + itemsPerGroup <= this.features.length) {
-                    numberOfDots.push(i);
-                }
+            for (let i = 0; i < this.features.length; i += itemsPerGroup) {
+                numberOfDots.push(i);
             }
             return numberOfDots;
         }
     },
 
     mounted() {
-        this.showSlides();
+        this.showSlides(this.slideIndex);
     },
     methods: {
-        currentSlide(index) {
-            if (index === this.numberOfDots - 1) {
-                this.slideIndex = this.features.length - 1;
-            } else {
-                this.slideIndex = index * 4;
+        currentSlide(step) {
+            if (this.slideIndex > this.features.length) {
+                this.slideIndex = this.features.length - step;
             }
-            this.showSlides();
-        },
-        plusSlides(step) {
-            // Tăng slideIndex
-            this.slideIndex += step;
-            // Nếu slideIndex vượt quá số lượng phần tử, quay lại phần tử đầu tiên
-            if (this.slideIndex >= this.features.length) {
+            if (this.slideIndex == this.features.length) {
                 this.slideIndex = 0;
             }
-            // Nếu slideIndex là giá trị âm, chuyển đến phần tử cuối cùng
-            else if (this.slideIndex < 0) {
-                this.slideIndex = this.features.length - 1;
-            }
+
+
             // Hiển thị slides mới
-            this.showSlides();
+            this.showSlides(this.slideIndex);;
+        },
+        plusSlides(step) {
+
+            if (this.slideIndex > this.features.length) {
+                this.slideIndex = this.features.length - step;
+            }
+            if (this.slideIndex == this.features.length) {
+                this.slideIndex = 0;
+            }
+
+
+            // Hiển thị slides mới
+            this.showSlides(this.slideIndex);
         },
 
-        showSlides() {
-            clearTimeout(this.timeoutId);
+        showSlides(i) {
+            console.log("i:" + i)
 
-            // Ẩn tất cả các slides trước khi hiển thị slides mới
             this.features.forEach((feature) => {
                 feature.isVisible = false;
             });
-
+            let lenght = i + 4;
             // Hiển thị 4 slides kế tiếp từ slideIndex
-            for (let i = 0; i < 4; i++) {
-                let indexToShow = (this.slideIndex + i) % this.features.length;
-                this.features[indexToShow].isVisible = true;
+            for (i; i < lenght; i++) {
+                this.features[i].isVisible = true;
             }
 
             // Tăng slideIndex sau mỗi lượt hiển thị
-            this.slideIndex = (this.slideIndex + 1) % this.features.length;
+            this.slideIndex = (this.slideIndex + 4);
 
             // Thiết lập timeout để tự động chuyển slide sau 5 giây
-            this.timeoutId = setTimeout(this.showSlides, 5000);
+
         }
+
 
 
     }
 });
 </script>
+
 <style>
 .container {
     margin: 0;
@@ -217,76 +207,6 @@ export default defineComponent({
     line-height: 50.2px;
 
 
-}
-
-.card {
-
-
-    transition: opacity 1.5s ease;
-    border-radius: 10px;
-    background: rgba(255, 255, 255, 1);
-    max-width: 270px;
-    max-height: 349px;
-    box-shadow: 0px 0px 35px 1px rgba(0, 0, 0, 0.18);
-    opacity: 1;
-}
-
-.card__top {
-    position: relative;
-    height: 50%;
-
-}
-
-.card .card__action {
-    position: absolute;
-    top: 220px;
-    right: 17px;
-    display: flex;
-    gap: 10%;
-    align-items: center;
-    justify-content: center;
-    width: 40%;
-}
-
-.card .card__action>div {
-    width: 45%;
-    height: 100%;
-    display: flex;
-    justify-content: flex-end;
-
-}
-
-.card .card__action img {
-    object-fit: cover;
-}
-
-.card__bottom {
-    margin: 20px 0 10px 0;
-}
-
-.card__bottom__color {
-    display: flex;
-    gap: 7px;
-    justify-content: center;
-    align-items: center;
-}
-
-.card__bottom__info {
-
-    padding: 0 15px 20px 15px;
-}
-
-.card__bottom__info h3 {
-    font-size: 20px;
-    font-weight: 700;
-    line-height: 30px;
-}
-
-.card__bottom__info p {
-    font-size: 18px;
-    font-weight: 600;
-    line-height: 22.59px;
-    opacity: .5;
 }
 
 .rectangles {

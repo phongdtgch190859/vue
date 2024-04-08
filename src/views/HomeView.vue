@@ -15,7 +15,7 @@ export default {
     components: {
         TheHeader,
         TheBanner,
-        TheFeatures
+        TheFeatures,
     }
 };
 

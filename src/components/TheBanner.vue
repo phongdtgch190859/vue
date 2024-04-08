@@ -26,7 +26,6 @@ export default defineComponent({
 .banner {
     width: 100%;
     display: grid;
-
 }
 
 .banner img {

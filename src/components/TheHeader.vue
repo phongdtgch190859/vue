@@ -1,128 +1,93 @@
+<!-- eslint-disable vue/no-parsing-error -->
 <template>
     <v-container>
-        <v-row class="header d-flex  ">
-            <v-col class="header_left d-flex">
+        <v-row class="header d-flex justify-space-between align-center">
+            <v-col cols="6" class="header-left d-flex align-center">
 
-                <img src="../assets/images/Logo.png" alt="">
-                <div class="search-input">
-                    <img src="../assets/images/Search.png" alt="Search" class="search-icon">
-                    <input type="text" placeholder="Search...">
+                <img src="../assets/images/Logo.png" alt="Logo" class="logo"></img>
+                <div class="search-input ">
 
+                    <v-text-field v-model="search" outlined dense class="search-text-field"><img
+                            src="../assets/images/Search.png" alt="Search" class="search-icon"></img>
+                        <span>Search...</span>
+                    </v-text-field>
                 </div>
-
             </v-col>
-            <v-col class="header_right ga-4  align-content-center">
-                <div class="header_right--icons d-flex ">
-                    <img src="../assets/images/Bag2.png" alt="">
-                    <img src="../assets/images/Heart.png" alt="">
-                </div>
-                <button class="outlined">Sign In</button>
-                <button class="Tonal">Sign Up</button>
-                <div class="header_right-user d-flex">
-                    <div class="header_right-user-info">
+            <v-col cols="6" class="header-right d-flex ga-4 justify-end align-center">
+                <img src="../assets/images/Bag2.png" alt="Bag" class="icon"></img>
+                <img src="../assets/images/Heart.png" alt="Heart" class="icon"></img>
+                <v-btn class="button d-flex align-center justify-center" color="primary">Sign In</v-btn>
+                <v-btn class="button d-flex align-center justify-center outlined">Sign Up</v-btn>
+                <div class="header-right-user d-flex align-center ga-5  ">
+                    <div class="header-right-user-info">
                         <h3>Name</h3>
                         <span>Description</span>
                     </div>
-                    <div class="header_right-user-avatar">
-                        <img src="../assets/images/Avatar.png" alt="">
-                    </div>
+                    <v-avatar class="header-right-user-avatar">
+                        <img src="../assets/images/Avatar.png" alt="Avatar"></img>
+                    </v-avatar>
                 </div>
                 <div class="switch">
-                    <img src="../assets/images/Frame1.png" alt="">
-                    <div class="switch__top"></div>
+                    <img src="../assets/images/Frame1.png" alt="Switch"></img>
+                    <div class="switch-top"></div>
                 </div>
-
             </v-col>
         </v-row>
     </v-container>
 </template>
 
 <script>
-import { defineComponent } from "vue";
-
-export default defineComponent({
-    name: "TheHeader",
+export default {
     data() {
         return {
-            isDay: true
-        };
-    },
-    methods: {
-        toggleDayNight() {
-            this.isDay = !this.isDay;
+            search: ''
         }
     }
-});
+}
 </script>
-<style>
+
+<style scoped>
 .header {
     height: 74px;
-
     margin: 25px 20px;
-
-    justify-content: space-between;
 }
 
-.header_left {
+.header-left {
     gap: 15px;
-    align-items: center;
-    width: 30%;
 }
 
-.header_left img {
+.logo {
     width: 5.8rem;
     height: 2rem;
 }
 
-.search-input {
-    position: relative;
-    height: 3.5rem;
-    display: inline-block;
+.search-text-field {
+    width: 345px;
+    height: 54px;
     display: flex;
-    width: 90%;
+    padding-left: 5px;
+    gap: 10px;
     align-items: center;
-}
-
-.search-input input[type="text"] {
-    padding-left: 35px;
-    display: inline-block;
-    width: 100%;
-    height: 100%;
     border: 1px solid #D7D7D7;
-    border-radius: 25px;
-    /* Để chỗ cho biểu tượng search */
+    border-radius: 12px;
+    color: #D7D7D7;
 }
 
-.search-input .search-icon {
-    position: absolute;
-    top: 50%;
-    left: 10px;
-    transform: translateY(-50%);
+.search-icon {
     width: 20px;
     height: 20px;
 }
 
-.header_right {
-    display: flex;
+.header-right {
     width: 60%;
     gap: 15px;
-    justify-content: end;
-    align-items: center;
 }
 
-.header_right--icons {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: calc(8% - 15px)
+.icon {
+    width: 19px;
+    height: 20px;
 }
 
-.header_right button {
-    width: 25%;
-    height: 54px;
-    border: 1px solid #4e4af2;
-    border-radius: 15px;
-}
 
 .outlined {
     color: #4e4af2;
@@ -131,64 +96,60 @@ export default defineComponent({
 .Tonal {
     background-color: #4e4af2;
     color: white;
-
 }
 
-.header_right--icons img {
-    width: 19px;
-    height: 20px;
-    display: block;
-}
 
-.header_right-user-avatar {
+
+.header-right-user-avatar {
     width: 40%;
     height: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
-.header_right-user-avatar img {
-    width: 50%;
+.header-right-user-avatar img {
+    width: 100%;
     height: 70%;
 }
 
-.header_right-user {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 5px;
-    width: 20%;
+.header-right-user-info {
+    width: 40%;
 }
 
-.header_right-user-info span {
+.header-right-user-info span {
     font-size: 12px;
     font-weight: 300;
     line-height: 16px;
 }
 
-.header_right-user-info h3 {
+.header-right-user-info h3 {
     font-size: 12px;
     font-weight: 700;
     line-height: 16px;
 }
 
+.button {
+    padding: 19px, 0px, 19px, 0px;
+    width: 151px;
+    height: 54px;
+    border-radius: 12px;
+    border: 1px solid #4e4af2;
+}
+
+.outlined {
+    color: white;
+    background-color: #4e4af2;
+}
+
 .switch {
-    display: inline-block;
     position: relative;
     margin-top: 5px;
-
 }
 
 .switch img {
     width: 100%;
     height: 100%;
-
 }
 
-
-
-.switch__top {
+.switch-top {
     position: absolute;
     top: -4px;
     right: -4px;
