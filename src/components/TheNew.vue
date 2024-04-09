@@ -1,23 +1,19 @@
 <template>
-    <div class="container__features">
-        <div class="section">
-            <div class="title">
-                <h1>FEATURES</h1>
+    <div class="container__news">
+        <div class="section__news">
+            <div class="section__news__title">
+                <h1>NEWS</h1>
             </div>
-            <div class="features">
-                <TheCart v-for="(card, index) in features" :key="index" :card="card">
-                </TheCart>
+            <div class="section__news__features">
+                <ThePost v-for="(post, index) in features" :key="index" :post="post">
+                </ThePost>
             </div>
-            <div @click="plusSlides(-3)" class="arrow__left">
+
+            <div @click="plusSlides(-2)" class="arrow__left">
                 <img src="../assets/images/ArrowLeft.png" alt="">
             </div>
-            <div @click="plusSlides(3)" class="arrow__right">
+            <div @click="plusSlides(2)" class="arrow__right">
                 <img src="../assets/images/ArrowRight.png" alt="">
-            </div>
-            <div class="rectangles">
-                <div v-for="(dot, index) in numberOfDots" :key="index" @click="currentSlide(index + 4)"
-                    :class="slideIndex / 4 == index + 1 ? 'active' : 'rectangles__item'">
-                </div>
             </div>
 
         </div>
@@ -26,11 +22,11 @@
 
 <script>
 import { defineComponent, ref } from "vue";
-import TheCart from "./TheCart.vue";
+import ThePost from "./ThePost.vue";
 export default defineComponent({
-    name: "TheFeatures",
+    name: "TheNew",
     components: {
-        TheCart,
+        ThePost,
     },
     data() {
         return {
@@ -41,62 +37,52 @@ export default defineComponent({
                 {
                     isVisible: true,
                     image: "../assets/images/Item1.png",
-                    name: "Jordan",
-                    price: 500
+                    content: "23% off in all products",
+
                 },
                 {
                     isVisible: false,
                     image: "../assets/images/Item2.png",
-                    name: "Nike",
-                    price: 400
+                    content: "23% off in all productsw",
+
                 },
                 {
                     isVisible: false,
                     image: "../assets/images/Item3.png",
-                    name: "Adidas",
-                    price: 300
+                    content: "23% off in all products2",
+
                 },
                 {
                     isVisible: false,
                     image: "../assets/images/Item4.png",
-                    name: "Puma",
-                    price: 250
+                    content: "23% off in all products3",
+
                 },
                 {
                     isVisible: false,
                     image: "../assets/images/Item5.png",
-                    name: "Reebok",
-                    price: 200
+                    content: "23% off in all products4",
+
                 },
                 {
                     isVisible: false,
                     image: "../assets/images/Item6.png",
-                    name: "Under Armour",
-                    price: 150
+                    content: "23% off in all products5",
+
                 },
                 {
                     isVisible: true,
                     image: "../assets/images/Item1.png",
-                    name: "Jordan1",
-                    price: 500
+                    content: "23% off in all products",
+
                 },
                 {
                     isVisible: false,
                     image: "../assets/images/Item2.png",
-                    name: "Nike2",
-                    price: 400
+                    content: "23% off in all products",
+
                 },
             ]
-        }
-    },
-    computed: {
-        numberOfDots() {
-            let numberOfDots = [];
-            const itemsPerGroup = 4; // Số lượng phần tử muốn hiển thị trong mỗi vòng
-            for (let i = 0; i < this.features.length; i += itemsPerGroup) {
-                numberOfDots.push(i);
-            }
-            return numberOfDots;
         }
     },
 
@@ -135,14 +121,14 @@ export default defineComponent({
             this.features.forEach((feature) => {
                 feature.isVisible = false;
             });
-            let lenght = i + 4;
+            let lenght = i + 3;
             // Hiển thị 4 slides kế tiếp từ slideIndex
             for (i; i < lenght; i++) {
                 this.features[i].isVisible = true;
             }
 
             // Tăng slideIndex sau mỗi lượt hiển thị
-            this.slideIndex = (this.slideIndex + 4);
+            this.slideIndex = (this.slideIndex + 3);
 
             // Thiết lập timeout để tự động chuyển slide sau 5 giây
 
@@ -155,31 +141,33 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.container__features {}
+.container__news {
+    background-color: white;
+}
 
 
-.section {
+.section__news {
     position: relative;
     width: 85%;
     margin: 0 auto;
-    padding-top: 64px;
+    padding-top: 80px;
     padding-bottom: 32px;
 
 }
 
-.features {
+.section__news__features {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 30px;
-    margin-top: 50px;
+    gap: 40px;
+    margin-top: 59px;
 
 }
 
 
 
 
-.section .title {
+.section__news__title {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -189,30 +177,22 @@ export default defineComponent({
     font-size: 40px;
     font-weight: 900;
     line-height: 50.2px;
-
-
 }
 
-.rectangles {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 35px auto;
-    gap: 7px;
-}
 
 .arrow__left {
     position: absolute;
-    top: 50%;
+    top: 63%;
     left: 0;
     display: flex;
     align-items: center;
     cursor: pointer;
+
 }
 
 .arrow__right {
     position: absolute;
-    top: 50%;
+    top: 63%;
     right: 0;
     display: flex;
     align-items: center;
@@ -222,21 +202,5 @@ export default defineComponent({
 .arrow__left:hover,
 .arrow__right:hover {
     background-color: rgba(0, 0, 0, 0.8);
-}
-
-.rectangles .rectangles__item {
-    width: 20px;
-    height: 8px;
-    background-color: rgba(55, 182, 233, 1);
-    border-radius: 25%;
-    transition: background-color 0.6s ease;
-    cursor: pointer;
-}
-
-.active {
-    width: 30px;
-    height: 8px;
-    background-color: rgba(78, 74, 242, 1);
-    border-radius: 25%;
 }
 </style>

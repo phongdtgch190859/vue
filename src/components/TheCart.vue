@@ -48,7 +48,7 @@ export default defineComponent({
     }
 });
 </script>
-<style>
+<style scoped>
 .card {
 
     transition: opacity 1.5s ease;

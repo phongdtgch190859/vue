@@ -22,7 +22,7 @@ export default defineComponent({
     }
 });
 </script>
-<style>
+<style scoped>
 .banner {
     width: 100%;
     display: grid;
