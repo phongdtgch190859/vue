@@ -287,7 +287,7 @@ export default defineComponent({
 .section__bottom {
     padding-top: 64px;
     display: flex;
-
+    justify-content: space-between;
     gap: 12%;
 }
 

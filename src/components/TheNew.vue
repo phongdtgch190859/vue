@@ -157,7 +157,7 @@ export default defineComponent({
 
 .section__news__features {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     gap: 40px;
     margin-top: 59px;
@@ -183,7 +183,7 @@ export default defineComponent({
 .arrow__left {
     position: absolute;
     top: 63%;
-    left: 0;
+    left: -20px;
     display: flex;
     align-items: center;
     cursor: pointer;
@@ -193,7 +193,7 @@ export default defineComponent({
 .arrow__right {
     position: absolute;
     top: 63%;
-    right: 0;
+    right: -20px;
     display: flex;
     align-items: center;
     cursor: pointer;

@@ -164,12 +164,11 @@ export default defineComponent({
     margin: 0 auto;
     padding-top: 64px;
     padding-bottom: 32px;
-
 }
 
 .features {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     gap: 30px;
     margin-top: 50px;
@@ -204,7 +203,7 @@ export default defineComponent({
 .arrow__left {
     position: absolute;
     top: 50%;
-    left: 0;
+    left: -20px;
     display: flex;
     align-items: center;
     cursor: pointer;
@@ -213,7 +212,7 @@ export default defineComponent({
 .arrow__right {
     position: absolute;
     top: 50%;
-    right: 0;
+    right: -20px;
     display: flex;
     align-items: center;
     cursor: pointer;

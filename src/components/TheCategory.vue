@@ -255,7 +255,7 @@ export default defineComponent({
 
 .category-data {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     flex-wrap: wrap;
     align-items: center;
     gap: 30px;
