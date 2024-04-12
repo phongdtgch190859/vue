@@ -1,39 +1,39 @@
 <!-- eslint-disable vue/no-parsing-error -->
 <template>
-    <v-container>
-        <v-row class="header d-flex justify-space-between align-center">
-            <v-col cols="6" class="header-left d-flex align-center">
 
-                <img src="../assets/images/Logo.png" alt="Logo" class="logo"></img>
-                <div class="search-input ">
+    <v-row class="header d-flex w-100 justify-space-between align-center">
+        <v-col cols="5" class="header-left d-flex align-center">
 
-                    <v-text-field v-model="search" outlined dense class="search-text-field"><img
-                            src="../assets/images/Search.png" alt="Search" class="search-icon"></img>
-                        <span>Search...</span>
-                    </v-text-field>
+            <img src="../assets/images/Logo.png" alt="Logo" class="logo"></img>
+            <div class="search-input ">
+
+                <v-text-field v-model="search" outlined dense class="search-text-field"><img
+                        src="../assets/images/Search.png" alt="Search" class="search-icon"></img>
+                    <span>Search...</span>
+                </v-text-field>
+            </div>
+        </v-col>
+        <v-col cols="7" class="header-right d-flex ga-4 justify-end align-center">
+            <img src="../assets/images/Bag2.png" alt="Bag" class="icon"></img>
+            <img src="../assets/images/Heart.png" alt="Heart" class="icon"></img>
+            <v-btn class="button d-flex align-center justify-center" color="primary">Sign In</v-btn>
+            <v-btn class="button d-flex align-center justify-center outlined">Sign Up</v-btn>
+            <div class="header-right-user d-flex align-center ga-5  ">
+                <div class="header-right-user-info">
+                    <h3>Name</h3>
+                    <span>Description</span>
                 </div>
-            </v-col>
-            <v-col cols="6" class="header-right d-flex ga-4 justify-end align-center">
-                <img src="../assets/images/Bag2.png" alt="Bag" class="icon"></img>
-                <img src="../assets/images/Heart.png" alt="Heart" class="icon"></img>
-                <v-btn class="button d-flex align-center justify-center" color="primary">Sign In</v-btn>
-                <v-btn class="button d-flex align-center justify-center outlined">Sign Up</v-btn>
-                <div class="header-right-user d-flex align-center ga-5  ">
-                    <div class="header-right-user-info">
-                        <h3>Name</h3>
-                        <span>Description</span>
-                    </div>
-                    <v-avatar class="header-right-user-avatar">
-                        <img src="../assets/images/Avatar.png" alt="Avatar"></img>
-                    </v-avatar>
-                </div>
-                <div class="switch">
-                    <img src="../assets/images/Frame1.png" alt="Switch"></img>
-                    <div class="switch-top"></div>
-                </div>
-            </v-col>
-        </v-row>
-    </v-container>
+                <v-avatar class="header-right-user-avatar">
+                    <img src="../assets/images/Avatar.png" alt="Avatar"></img>
+                </v-avatar>
+            </div>
+            <div class="switch">
+                <img src="../assets/images/Frame1.png" alt="Switch"></img>
+                <div class="switch-top"></div>
+            </div>
+        </v-col>
+    </v-row>
+
 </template>
 
 <script>
@@ -50,6 +50,13 @@ export default {
 .header {
     height: 74px;
     margin: 25px 20px;
+    position: fixed;
+    background-color: white;
+    width: 100%;
+    margin: 0 auto;
+    z-index: 100;
+    top: 0;
+
 }
 
 .header-left {

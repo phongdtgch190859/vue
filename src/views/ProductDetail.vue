@@ -5,7 +5,7 @@
         <div class="section__product_left">
             <div class="section__product_left__top">
                 <div class="section__product__left__top__image">
-                    <img src="../assets/images/ProductItem1.png" alt="">
+                    <img src="../assets/images/ProductItemBlack.png" alt="">
 
                 </div>
                 <div class="section__product_left__top__tags">
@@ -14,18 +14,10 @@
                 </div>
             </div>
             <div class="section__product_left__bottom">
-                <div class="section__product_left__bottom__thumbnails">
-                    <div class="section__product_left__bottom__item">
-                        <img src="../assets/images/ProductItem1.png" alt="">
-                    </div>
-                    <div class="section__product_left__bottom__item">
-                        <img src="../assets/images/ProductItem1.png" alt="">
-                    </div>
-                    <div class="section__product_left__bottom__item">
-                        <img src="../assets/images/ProductItem1.png" alt="">
-                    </div>
-                    <div class="section__product_left__bottom__item">
-                        <img src="../assets/images/ProductItem1.png" alt="">
+
+                <div v-if="images" class="section__product_left__bottom__thumbnails">
+                    <div v-for="(item, index) in colors" :key="index" class="section__product_left__bottom__item">
+                        <img :src="images[item.image]" alt="">
                     </div>
                 </div>
                 <div class="arrow__left">&lt;</div>
@@ -78,11 +70,12 @@
                 <div class="section__product__right__info__colors">
                     <h3>Choose a Color</h3>
                     <div class="section__product__right__info__colors--select">
-                        <button :style="getButtonStyle('red')" @click="setColor('red')"></button>
-                        <button :style="getButtonStyle('blue')" @click="setColor('blue')"></button>
-                        <button :style="getButtonStyle('black')" @click="setColor('black')"></button>
-                        <button :style="getButtonStyle('white')" @click="setColor('white')"></button>
-                        <button :style="getButtonStyle('brown')" @click="setColor('brown')"></button>
+                        <button v-for="(color, index) in colors" :key="index"
+                            :style="{ backgroundColor: color.color, outline: selectedColor === color.color ? `3px solid ${color.color}` : 'none' }"
+                            @click="setColor(color.color)"> <img v-if="color.color === selectedColor" class="tick"
+                                src="../assets/images/Tick.png" alt="">
+                        </button>
+
                         <div value="selected">
                             <img src="../assets/images/Selected.png" alt="">
                         </div>
@@ -91,23 +84,24 @@
                 <div class="section__product__right__info__sỉzes">
                     <h3>Choose a Size</h3>
                     <div class="section__product__right__info__sizes--select">
-                        <ul>
-                            <li>36-Female</li>
-                            <li>36-Female</li>
-                            <li>36-Female</li>
-                            <li>36-Female</li>
-                            <li>36-Female</li>
-                            <li>36-Female</li>
-                            <li>36-Female</li>
-                            <li>36-Female</li>
-                        </ul>
+
+                        <v-radio-group v-model="ex7" inline>
+
+                            <v-radio class="label" v-for="(item, index) in sizes" :key="index" color="info"
+                                :label="item.label" :value="item.value"></v-radio>
+
+                        </v-radio-group>
+
+
+
+
                     </div>
                 </div>
                 <div class="add">
                     <div class="add_amount">
-                        <span>-</span>
-                        <span>5</span>
-                        <span>+</span>
+                        <span @click="this.setAmount(-1)">-</span>
+                        <span id="amount">{{ amount }}</span>
+                        <span @click="this.setAmount(+1)">+</span>
                     </div>
                     <button>
                         <img src="../assets/images/CartWhile.png" alt="">
@@ -140,37 +134,96 @@
 <script>
 import { defineComponent } from "vue";
 import TheHeader from "../components/TheHeader.vue";
-
+import { filename } from 'pathe/utils';
 import TheFooter from "../components/TheFooter.vue";
+
 export default {
-    selectedColor: null,
     name: "ProductDetail",
     components: {
         TheHeader,
-        TheFooter
+        TheFooter,
     },
+    data() {
+        return {
+            curentIndex: 0,
+            selectedColor: null,
+            ex7: 'red',
+            ex8: 'primary',
+            amount: 0,
+            colors: [
+                {
+                    color: "rgba(223, 56, 50, 1)",
+                    image: "ProductItemRed",
+                },
+                {
+                    color: "rgba(60, 173, 212, 1)",
+                    image: "ProductItemBlue",
+                },
+                {
+                    color: "rgba(24, 24, 26, 1)",
+                    image: "ProductItemBlack"
+                },
+                {
+                    color: "rgba(238, 238, 238, 1)",
+                    image: "ProductItemWhite"
+                },
+                {
+                    color: "rgba(116, 99, 82, 1)",
+                    image: "ProductItemBrown"
+                },
+            ],
+            sizes: [
+                { label: '36-Female', value: '36-Female' },
+                { label: '37-Female', value: '37-Female' },
+                { label: '38-Female', value: '38-Female' },
+                { label: '39-Female', value: '39-Female' },
+                { label: '40-Female', value: '40-Female' },
+                { label: '40-Male', value: '40-Male' },
+                { label: '41-Male', value: '41-Male' },
+                { label: '42-Male', value: '42-Male' },
+                { label: '43-Male', value: '43-Male' },
+                { label: '44-Male', value: '44-Male' },
+            ],
+            images: []
+        };
+    },
+    async created() {
+        // Wait for the glob promise to resolve and populate the images object
+        const glob = await import.meta.glob('../assets/images/*.png', { eager: true });
+        if (glob) {
+
+            // Proceed with populating the images object
+            this.images = Object.fromEntries(
+                Object.entries(glob).map(([key, value]) => [filename(key), value.default])
+            );
+            console.log(this.images[this.colors[0].image])
+        } else {
+            console.error('Failed to load images from glob.');
+        }
+
+    },
+
     methods: {
         setColor(color) {
             this.selectedColor = color;
         },
-        getButtonStyle(color) {
-            return {
-                backgroundColor: color,
-            };
-        }
-    }
+        setAmount(step) {
+            this.amount += step;
+        },
+    },
 };
 
 </script>
 <style scoped>
 .section__product {
+
     display: flex;
     width: 88%;
     margin: 0 auto;
     gap: 89px;
     justify-content: space-between;
     background: rgba(255, 255, 255, 1);
-
+    margin-top: 150px;
 }
 
 .section__product_left {
@@ -323,6 +376,9 @@ a {
     font-weight: 400;
     line-height: 20.08px;
     text-align: left;
+    color: rgba(185, 187, 191, 1);
+    margin-top: 11px;
+    display: block;
 }
 
 .section__product__right__top__overview__right {
@@ -369,7 +425,8 @@ a {
     font-weight: 400;
     line-height: 26.36px;
     text-align: left;
-    color: rgba(0, 0, 0, 0.5);
+    color: rgba(185, 187, 191, 1);
+
     text-decoration: line-through;
 }
 
@@ -383,7 +440,7 @@ a {
 
 }
 
-.section__product__right__top__infos__review span {
+.section__product__right__top__infos__review p>span {
     color: rgba(62, 146, 66, 1);
 
 }
@@ -420,6 +477,10 @@ a {
 
 }
 
+.section__product__right__info {
+    margin-top: 40px;
+}
+
 .section__product__right__info h3 {
     font-family: Inter;
     font-size: 16px;
@@ -427,15 +488,133 @@ a {
     line-height: 19.36px;
     text-align: left;
     color: rgba(185, 187, 191, 1);
+    margin-bottom: 13px;
+}
 
+.section__product__right__info__colors--select {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 40px;
 }
 
 .section__product__right__info__colors--select button {
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    opacity: 0px;
-    background-color: rgba(238, 238, 238, 1);
+    display: block;
+    padding: 17px;
+    box-sizing: border-box;
+    border: 3px solid white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
 
+}
+
+.label {
+    font-family: Mulish;
+    font-size: 14px !important;
+    font-weight: 500;
+    line-height: 17.57px;
+    text-align: left;
+    width: 114px;
+
+}
+
+.add {
+    display: flex;
+    gap: 20%;
+}
+
+.add button {
+    background: rgba(102, 99, 223, 1);
+    width: 310.87px;
+    height: 59px;
+    border-radius: 29.5px;
+    opacity: 0px;
+    font-family: Mulish;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 20.08px;
+    color: rgba(255, 255, 255, 1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+
+}
+
+.add_amount {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    font-family: Inter;
+    font-size: 25px;
+    font-weight: 900;
+    line-height: 21.78px;
+    color: rgba(163, 163, 163, 1);
+
+}
+
+.add_amount>span {
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    width: 50px;
+}
+
+#amount {
+
+    color: rgba(58, 73, 128, 1);
+}
+
+.add_amount>span:hover {
+    color: rgba(58, 73, 128, 1);
+
+}
+
+.section__product__right__bottom {
+    margin-top: 40px;
+    border-radius: 14px;
+    border: 1px solid rgba(228, 228, 228, 1);
+    font-family: Mulish;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 17.57px;
+    text-align: left;
+    color: rgba(114, 108, 108, 1);
+
+}
+
+.section__product__right__bottom h3 {
+    font-size: 17px;
+    font-weight: 800;
+    line-height: 21.34px;
+    color: rgba(29, 54, 77, 1);
+}
+
+.section__product__right__bottom a {
+    padding: 0;
+    color: rgba(114, 108, 108, 1);
+    cursor: pointer;
+    text-decoration: solid;
+}
+
+.section__product__right__bottom img {
+    margin-top: 3px;
+    height: 30%;
+}
+
+.section__product__right__bottom__free {
+    border-bottom: 1px solid rgba(228, 228, 228, 1);
+}
+
+.section__product__right__bottom__free,
+.section__product__right__bottom__return {
+    display: flex;
+    height: 48%;
+    padding: 17px;
+    gap: 14px;
 }
 </style>

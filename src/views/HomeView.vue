@@ -46,6 +46,6 @@ export default {
         radial-gradient(at 94.72% 35.49%, rgba(190, 112, 255, 0.19) 43.75%, rgba(220, 178, 255, 0.083616) 83.85%, rgba(255, 255, 255, 0) 100%),
 
         radial-gradient(at 24.13% 80.28%, rgba(251, 202, 251, 0.25) 0%, rgba(243, 239, 246, 0.25) 51.56%, rgba(239, 228, 249, 0.25) 100%);
-
+    position: relative;
 }
 </style>
