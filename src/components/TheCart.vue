@@ -1,6 +1,5 @@
 <template>
-
-    <div class="card" v-show="card.isVisible">
+    <div class="card" v-show="props.card.isVisible">
         <div class="card__top">
             <div class="card__image">
                 <img src="../assets/images/Item1.png" alt="">
@@ -12,41 +11,43 @@
                 <div class="card__action-right">
                     <img src="../assets/images/Bag2.png" alt="">
                 </div>
-
             </div>
+
         </div>
         <div class="card__bottom">
             <div class="card__bottom__color">
-                <img class=".card__bottom__color--green" src="../assets/images/LightGreen.png" alt="">
-                <img class=".card__bottom__color--pink" src="../assets/images/LightPink.png" alt="">
-                <img class=".card__bottom__color--black" src="../assets/images/Black.png" alt="">
+                <img class="card__bottom__color--green" src="../assets/images/LightGreen.png" alt="">
+                <img class="card__bottom__color--pink" src="../assets/images/LightPink.png" alt="">
+                <img class="card__bottom__color--black" src="../assets/images/Black.png" alt="">
             </div>
             <div class="card__bottom__info">
-                <h3>{{ card.name }}</h3>
-                <p>Price: <span>$ {{ card.price }}</span></p>
+                <h3>{{ props.card.name }}</h3>
+                <p>Price: <span>$ {{ props.card.price }}</span></p>
+            </div>
+            <div class="d-flex justify-md-space-between ma-3">
+                <v-rating v-model="rating" readonly color="yellow darken-3" size="medium" half-increments hover>
+                </v-rating>
+                <pre>{{ props.card.rating }}</pre>
             </div>
         </div>
     </div>
-
     <div v-for="(dot, index) in numberOfDots" :key="index" @click="currentSlide(index * 4)"
-        :class="slideIndex >= index * 4 && slideIndex < Math.min((index + 1) * 4, features.length) ? 'active' : 'rectangles__item'">
+        :class="{ 'active': slideIndex >= index * 4 && slideIndex < Math.min((index + 1) * 4, features.length), 'rectangles__item': slideIndex < index * 4 || slideIndex >= Math.min((index + 1) * 4, features.length) }">
     </div>
-
-
 </template>
 
-<script>
-import { defineComponent } from "vue";
-export default defineComponent({
-    name: "TheCart",
-    props: {
-        card: {
+<script setup>
+import { ref } from "vue";
 
-            type: Object,
-            required: true
-        }
+const rating = ref(3.5);
+const props = defineProps({
+    card: {
+        type: Object,
+        required: true
     }
 });
+
+
 </script>
 <style scoped>
 .card {
@@ -55,7 +56,7 @@ export default defineComponent({
     border-radius: 10px;
     background: rgba(255, 255, 255, 1);
     max-width: 270px;
-    max-height: 349px;
+
     box-shadow: 0px 0px 35px 1px rgba(0, 0, 0, 0.18);
     opacity: 1;
 }

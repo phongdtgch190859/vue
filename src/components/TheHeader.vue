@@ -1,19 +1,20 @@
 <!-- eslint-disable vue/no-parsing-error -->
 <template>
 
-    <v-row class="header d-flex w-100 justify-space-between align-center">
-        <v-col cols="5" class="header-left d-flex align-center">
+    <v-row class="header">
+        <v-col cols="4" class="header-left d-flex align-center">
 
             <img src="../assets/images/Logo.png" alt="Logo" class="logo"></img>
             <div class="search-input ">
 
-                <v-text-field v-model="search" outlined dense class="search-text-field"><img
-                        src="../assets/images/Search.png" alt="Search" class="search-icon"></img>
-                    <span>Search...</span>
+                <v-text-field v-model="search" outlined dense class="search-text-field" label="Search"
+                    prepend-inner-icon="mdi-magnify" hide-details single-line>
+
+
                 </v-text-field>
             </div>
         </v-col>
-        <v-col cols="7" class="header-right d-flex ga-4 justify-end align-center">
+        <v-col cols="8" class="header-right d-flex ga-4 justify-end align-center">
             <img src="../assets/images/Bag2.png" alt="Bag" class="icon"></img>
             <img src="../assets/images/Heart.png" alt="Heart" class="icon"></img>
             <v-btn class="button d-flex align-center justify-center" color="primary">Sign In</v-btn>
@@ -52,11 +53,12 @@ export default {
     margin: 25px 20px;
     position: fixed;
     background-color: white;
-    width: 100%;
+    width: 1440px;
     margin: 0 auto;
     z-index: 100;
     top: 0;
-
+    justify-content: space-between;
+    margin: 0 auto;
 }
 
 .header-left {
@@ -80,10 +82,10 @@ export default {
     color: #D7D7D7;
 }
 
-.search-icon {
-    width: 20px;
-    height: 20px;
+.search-text-field .v-field__field {
+    width: 345px !important;
 }
+
 
 .header-right {
     width: 60%;

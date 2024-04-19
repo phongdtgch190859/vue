@@ -5,7 +5,7 @@
         <div class="section__product_left">
             <div class="section__product_left__top">
                 <div class="section__product__left__top__image">
-                    <img src="../assets/images/ProductItemBlack.png" alt="">
+                    <img :src="images[curentImage]" alt="">
 
                 </div>
                 <div class="section__product_left__top__tags">
@@ -16,7 +16,8 @@
             <div class="section__product_left__bottom">
 
                 <div v-if="images" class="section__product_left__bottom__thumbnails">
-                    <div v-for="(item, index) in colors" :key="index" class="section__product_left__bottom__item">
+                    <div v-for="(item, index) in colors" :key="index" class="section__product_left__bottom__item"
+                        :class="{ active: selectedColor === item.color }" @click="setColor(item.color, item.image)">
                         <img :src="images[item.image]" alt="">
                     </div>
                 </div>
@@ -72,8 +73,8 @@
                     <div class="section__product__right__info__colors--select">
                         <button v-for="(color, index) in colors" :key="index"
                             :style="{ backgroundColor: color.color, outline: selectedColor === color.color ? `3px solid ${color.color}` : 'none' }"
-                            @click="setColor(color.color)"> <img v-if="color.color === selectedColor" class="tick"
-                                src="../assets/images/Tick.png" alt="">
+                            @click="setColor(color.color, color.image)"> <img v-if="color.color === selectedColor"
+                                class="tick" src="../assets/images/Tick.png" alt="">
                         </button>
 
                         <div value="selected">
@@ -127,98 +128,174 @@
                 </div>
             </div>
         </div>
+
+    </div>
+    <div class="section__body">
+        <div class="tile">
+            <h3 class="selected">Description</h3>
+            <h3>Review</h3>
+        </div>
+        <div class="content">
+            <div class="content__description">
+                <h2>Product Description</h2>
+                <div>
+                    <p>Praised by many for its enduring look and feel, the wardrobe staple hits refresh with the Nike
+                        Blazer Mid '77 Jumbo.Harnessing the old-school look you love, it now has an elastic heel with
+                        corduroy-like texture and large pull tabs for easy on and off.The oversized Swoosh design and
+                        jumbo laces add a fun twist</p>
+                </div>
+            </div>
+            <div class="content__list">
+                <h2>Benefits</h2>
+                <ul>
+                    <li>Thick, exposed foam tongue</li>
+                    <li>Jumbo laces</li>
+                    <li>Thick thread stitching</li>
+                    <li>Large pull tabs on heel and tongue</li>
+                    <li>Oversized woven label</li>
+                </ul>
+            </div>
+
+            <div class="content__list">
+                <h2>Product Details</h2>
+                <ul>
+                    <li>A raised herringbone pattern on the rubber outsole exaggerates the classic look.</li>
+                    <li>Big and Bold: The oversized Swoosh design and jumbo laces add a bold look to any outfit.
+                    </li>
+                </ul>
+
+            </div>
+
+            <div class="content__list">
+                <h2>More Details</h2>
+                <ul>
+                    <li>Big and Bold: The oversized Swoosh design and jumbo laces add a bold look to any outfit.
+                    </li>
+                    <li>Colour Shown: Mutiple-Color</li>
+                    <li>Country/Region of Origin: Vietnam</li>
+                </ul>
+
+            </div>
+        </div>
+    </div>
+    <div class="section__similar">
+        <div class="section__similar__title">
+            <h3>Similar Items You Might Also Like</h3>
+        </div>
+        <div>
+            <MyCarosel class="list_similar_product" :datas="features" :step="5" :isDot="false">
+                <!-- Sử dụng slot để chèn nội dung vào Carousel -->
+                <template v-for="(card, index) in features" :key="index">
+                    <!-- Truyền dữ liệu cho mỗi item thông qua props -->
+                    <TheCart :card="card" />
+                </template>
+            </MyCarosel>
+        </div>
+
     </div>
 
     <TheFooter></TheFooter>
 </template>
 <script>
-import { defineComponent } from "vue";
-import TheHeader from "../components/TheHeader.vue";
-import { filename } from 'pathe/utils';
-import TheFooter from "../components/TheFooter.vue";
-
+import { ref, onMounted } from 'vue';
+import TheHeader from '../components/TheHeader.vue';
+import TheFooter from '../components/TheFooter.vue';
+import MyCarosel from "../components/MyCarosel.vue"
+import TheCart from "../components/TheCart.vue"
 export default {
-    name: "ProductDetail",
+    name: 'ProductDetail',
     components: {
         TheHeader,
         TheFooter,
+        MyCarosel,
+        TheCart
     },
-    data() {
-        return {
-            curentIndex: 0,
-            selectedColor: null,
-            ex7: 'red',
-            ex8: 'primary',
-            amount: 0,
-            colors: [
-                {
-                    color: "rgba(223, 56, 50, 1)",
-                    image: "ProductItemRed",
-                },
-                {
-                    color: "rgba(60, 173, 212, 1)",
-                    image: "ProductItemBlue",
-                },
-                {
-                    color: "rgba(24, 24, 26, 1)",
-                    image: "ProductItemBlack"
-                },
-                {
-                    color: "rgba(238, 238, 238, 1)",
-                    image: "ProductItemWhite"
-                },
-                {
-                    color: "rgba(116, 99, 82, 1)",
-                    image: "ProductItemBrown"
-                },
-            ],
-            sizes: [
-                { label: '36-Female', value: '36-Female' },
-                { label: '37-Female', value: '37-Female' },
-                { label: '38-Female', value: '38-Female' },
-                { label: '39-Female', value: '39-Female' },
-                { label: '40-Female', value: '40-Female' },
-                { label: '40-Male', value: '40-Male' },
-                { label: '41-Male', value: '41-Male' },
-                { label: '42-Male', value: '42-Male' },
-                { label: '43-Male', value: '43-Male' },
-                { label: '44-Male', value: '44-Male' },
-            ],
-            images: []
+    setup() {
+        const curentImage = ref('ProductItemRed');
+        const selectedColor = ref(null);
+        const ex7 = ref('red');
+        const amount = ref(0);
+        const images = ref({});
+
+        const colors = [
+            { color: 'rgba(223, 56, 50, 1)', image: 'ProductItemRed' },
+            { color: 'rgba(60, 173, 212, 1)', image: 'ProductItemBlue' },
+            { color: 'rgba(24, 24, 26, 1)', image: 'ProductItemBlack' },
+            { color: 'rgba(238, 238, 238, 1)', image: 'ProductItemWhite' },
+            { color: 'rgba(116, 99, 82, 1)', image: 'ProductItemBrown' }
+        ];
+
+        const sizes = ref([
+            { label: '36-Female', value: '36-Female' },
+            { label: '37-Female', value: '37-Female' },
+            { label: '38-Female', value: '38-Female' },
+            { label: '39-Female', value: '39-Female' },
+            { label: '40-Female', value: '40-Female' },
+            { label: '40-Male', value: '40-Male' },
+            { label: '41-Male', value: '41-Male' },
+            { label: '42-Male', value: '42-Male' },
+            { label: '43-Male', value: '43-Male' },
+            { label: '44-Male', value: '44-Male' }
+        ]);
+        const features = ref([
+            { isVisible: true, image: "../assets/images/Item1.png", name: "Jordan", price: 500, rating: 1 },
+            { isVisible: false, image: "../assets/images/Item2.png", name: "Nike", price: 400, rating: 3.5 },
+            { isVisible: true, image: "../assets/images/Item1.png", name: "Jordan", price: 500, rating: 4 },
+            { isVisible: false, image: "../assets/images/Item2.png", name: "Nike", price: 400, rating: 2.5 },
+            { isVisible: true, image: "../assets/images/Item1.png", name: "Jordan", price: 500, rating: 4.5 },
+            { isVisible: false, image: "../assets/images/Item2.png", name: "Nike", price: 400, rating: 5 },
+            { isVisible: false, image: "../assets/images/Item2.png", name: "Nike", price: 400, rating: 2.5 },
+            { isVisible: true, image: "../assets/images/Item1.png", name: "Jordan", price: 500, rating: 4.5 },
+            { isVisible: false, image: "../assets/images/Item2.png", name: "Nike", price: 400, rating: 10 },
+            // Bổ sung các feature khác ở đây
+        ]);
+        const setColor = (color, imageUrl) => {
+            selectedColor.value = color;
+            curentImage.value = imageUrl;
         };
-    },
-    async created() {
-        // Wait for the glob promise to resolve and populate the images object
-        const glob = await import.meta.glob('../assets/images/*.png', { eager: true });
-        if (glob) {
 
-            // Proceed with populating the images object
-            this.images = Object.fromEntries(
-                Object.entries(glob).map(([key, value]) => [filename(key), value.default])
-            );
-            console.log(this.images[this.colors[0].image])
-        } else {
-            console.error('Failed to load images from glob.');
-        }
+        const setAmount = (step) => {
+            amount.value += step;
+        };
 
-    },
+        const fetchImages = async () => {
+            const imagesContext = import.meta.glob('../assets/images/*.png');
+            const imageKeys = Object.keys(imagesContext);
+            const imageFiles = await Promise.all(imageKeys.map(key => imagesContext[key]()));
 
-    methods: {
-        setColor(color) {
-            this.selectedColor = color;
-        },
-        setAmount(step) {
-            this.amount += step;
-        },
-    },
+            imageKeys.forEach((key, index) => {
+                images.value[key.replace(/^.*[\\/]/, '').split('.')[0]] = imageFiles[index].default;
+            });
+        };
+
+        onMounted(() => {
+            fetchImages();
+        });
+
+        return {
+            curentImage,
+            selectedColor,
+            ex7,
+            amount,
+            colors,
+            sizes,
+            images,
+            setColor,
+            setAmount,
+            features
+        };
+    }
 };
-
 </script>
+
+
+
 <style scoped>
+/* section product */
 .section__product {
 
     display: flex;
-    width: 88%;
+    width: 100%;
     margin: 0 auto;
     gap: 89px;
     justify-content: space-between;
@@ -227,7 +304,7 @@ export default {
 }
 
 .section__product_left {
-    width: 45%;
+    width: 50%;
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -243,12 +320,15 @@ export default {
     height: 70%;
 }
 
-.section__product__left__top__image {
+
+
+.section__product__left__top__image img {
     display: flex;
     justify-content: center;
     border: 1px solid rgba(237, 240, 248, 1);
     border-radius: 17px;
-
+    width: 100%;
+    height: 832px;
 }
 
 .section__product_left__top__tags {
@@ -312,7 +392,11 @@ export default {
     top: 30%;
 }
 
-.section__product_left__bottom__item {}
+.section__product_left__bottom__item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
 
 
@@ -323,7 +407,11 @@ export default {
     border: 3px solid linear-gradient(136.22deg, #3A4980 2.59%, rgba(44, 48, 121, 0.2) 97.48%);
 }
 
-
+.active {
+    border: 1px solid rebeccapurple;
+    border-radius: 14px;
+    box-shadow: 1px 0px 1px 2px #999999;
+}
 
 .section__product__right__top__menu p,
 a {
@@ -574,6 +662,10 @@ a {
 
 }
 
+.section__product__right {
+    width: 40%;
+}
+
 .section__product__right__bottom {
     margin-top: 40px;
     border-radius: 14px;
@@ -614,7 +706,126 @@ a {
 .section__product__right__bottom__return {
     display: flex;
     height: 48%;
-    padding: 17px;
+    padding: 10px;
     gap: 14px;
+}
+
+/* end section product */
+
+/* section body */
+.section__body {
+    font-family: Mulish;
+    font-weight: 400;
+    line-height: 20.08px;
+    margin-top: 75px;
+
+}
+
+.tile {
+    display: flex;
+    flex-direction: row;
+    text-align: left;
+    gap: 30px;
+    font-family: Mulish;
+    font-weight: 600;
+    border-bottom: 4px solid rgba(234, 236, 240, 1);
+    color: rgba(152, 162, 179, 1);
+}
+
+.tile h3 {
+    padding: 20px 23px;
+}
+
+.selected {
+    color: rgba(22, 76, 150, 1);
+    font-weight: 600px;
+    border-bottom: 4px solid rgba(22, 76, 150, 1);
+}
+
+.content {
+    margin: 25px auto;
+    width: 92%;
+    padding-left: 10px;
+}
+
+.content__list {
+    margin: 25px 0;
+}
+
+.content h2 {
+    display: inline-block;
+    font-size: 24px;
+    font-weight: 800;
+    line-height: 30.12px;
+    text-align: left;
+    padding: 20px 0;
+}
+
+.content__description P {
+    font-family: Mulish;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 27.2px;
+    text-align: left;
+
+}
+
+ul {
+    list-style-type: none;
+    margin-left: 10px;
+}
+
+ul li {
+    margin-bottom: 12px;
+    margin-left: -10px;
+    display: flex;
+    align-items: center;
+}
+
+ul li::before {
+    color: transparent;
+    font-size: 1px;
+    content: " ";
+    width: 15px;
+    height: 15px;
+    background-color: rgba(231, 244, 252, 1);
+    /* Màu của hình tròn */
+    border-radius: 50%;
+    margin-left: -1.3em;
+    margin-right: 15px;
+    background-image: url("../assets/images/IistIcon.png");
+    /* Hình ảnh mask */
+    background-size: cover;
+    box-shadow: 0 0 0 5px rgba(231, 244, 252, 1);
+    /* Màu và kích thước của viền */
+}
+
+.custom-rating .v-icon {
+    color: #FFD700 !important;
+    /* Màu vàng */
+}
+
+/* end section body */
+
+/* section similar */
+.section__similar {
+    width: 100%;
+    margin: 0 auto;
+
+
+}
+
+.section__similar__title {
+    margin-top: 50px;
+    font-family: Mulish;
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 38px;
+    text-align: left;
+}
+
+.list_similar_product {
+    position: relative;
+
 }
 </style>

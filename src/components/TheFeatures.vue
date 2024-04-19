@@ -5,153 +5,115 @@
                 <h1>FEATURES</h1>
             </div>
             <div class="features">
-                <TheCart v-for="(card, index) in features" :key="index" :card="card">
-                </TheCart>
+                <MyCarosel class="sdhfkjsahfakjsh" :datas="features" :step="4">
+                    <!-- Sử dụng slot để chèn nội dung vào Carousel -->
+                    <template v-for="(card, index) in features" :key="index">
+                        <!-- Truyền dữ liệu cho mỗi item thông qua props -->
+                        <TheCart :card="card" />
+                    </template>
+                </MyCarosel>
             </div>
-            <div @click="plusSlides(-3)" class="arrow__left">
-                <img src="../assets/images/ArrowLeft.png" alt="">
-            </div>
-            <div @click="plusSlides(3)" class="arrow__right">
-                <img src="../assets/images/ArrowRight.png" alt="">
-            </div>
-            <div class="rectangles">
-                <div v-for="(dot, index) in numberOfDots" :key="index" @click="currentSlide(index + 4)"
-                    :class="slideIndex / 4 == index + 1 ? 'active' : 'rectangles__item'">
-                </div>
-            </div>
-
         </div>
     </div>
+
+
+    <!-- <div class="container__features">
+        <div class="section">
+            <div class="title">
+                <h1>FEATURES</h1>
+            </div>
+            <div class="features">
+                <slot></slot>
+                <TheCart v-for="(card, index) in datas" :key="index" :card="card" />
+            </div>
+            <div @click="currentSlide(-1, false)" class="arrow__left">
+                <img src="../assets/images/ArrowLeft.png" alt="">
+            </div>
+            <div @click="currentSlide(1, false)" class="arrow__right">
+                <img src="../assets/images/ArrowRight.png" alt="">
+            </div>
+
+            <div class="rectangles">
+                <div v-for="(dot, index) in numberOfDots" :key="index" @click="currentSlide(index, true)"
+                    :class="{ 'active': slideIndex === index, 'rectangles__item': slideIndex !== index }">
+                </div>
+            </div>
+        </div>
+    </div> -->
 </template>
 
-<script>
-import { defineComponent, ref } from "vue";
+<script setup>
+import { ref, computed, onMounted } from 'vue';
 import TheCart from "./TheCart.vue";
-export default defineComponent({
-    name: "TheFeatures",
-    components: {
-        TheCart,
-    },
-    data() {
-        return {
-            slideIndex: 0,
-            timeoutId: null,
+import MyCarosel from "./MyCarosel.vue"
 
-            features: [
-                {
-                    isVisible: true,
-                    image: "../assets/images/Item1.png",
-                    name: "Jordan",
-                    price: 500
-                },
-                {
-                    isVisible: false,
-                    image: "../assets/images/Item2.png",
-                    name: "Nike",
-                    price: 400
-                },
-                {
-                    isVisible: false,
-                    image: "../assets/images/Item3.png",
-                    name: "Adidas",
-                    price: 300
-                },
-                {
-                    isVisible: false,
-                    image: "../assets/images/Item4.png",
-                    name: "Puma",
-                    price: 250
-                },
-                {
-                    isVisible: false,
-                    image: "../assets/images/Item5.png",
-                    name: "Reebok",
-                    price: 200
-                },
-                {
-                    isVisible: false,
-                    image: "../assets/images/Item6.png",
-                    name: "Under Armour",
-                    price: 150
-                },
-                {
-                    isVisible: true,
-                    image: "../assets/images/Item1.png",
-                    name: "Jordan1",
-                    price: 500
-                },
-                {
-                    isVisible: false,
-                    image: "../assets/images/Item2.png",
-                    name: "Nike2",
-                    price: 400
-                },
-            ]
-        }
-    },
-    computed: {
-        numberOfDots() {
-            let numberOfDots = [];
-            const itemsPerGroup = 4; // Số lượng phần tử muốn hiển thị trong mỗi vòng
-            for (let i = 0; i < this.features.length; i += itemsPerGroup) {
-                numberOfDots.push(i);
-            }
-            return numberOfDots;
-        }
-    },
+const slideIndex = ref(0);
 
-    mounted() {
-        this.showSlides(this.slideIndex);
-    },
-    methods: {
-        currentSlide(step) {
-            if (this.slideIndex > this.features.length) {
-                this.slideIndex = this.features.length - step;
-            }
-            if (this.slideIndex == this.features.length) {
-                this.slideIndex = 0;
-            }
-
-
-            // Hiển thị slides mới
-            this.showSlides(this.slideIndex);;
-        },
-        plusSlides(step) {
-
-            if (this.slideIndex > this.features.length) {
-                this.slideIndex = this.features.length - step;
-            }
-            if (this.slideIndex == this.features.length) {
-                this.slideIndex = 0;
-            }
-
-
-            // Hiển thị slides mới
-            this.showSlides(this.slideIndex);
-        },
-
-        showSlides(i) {
-
-            this.features.forEach((feature) => {
-                feature.isVisible = false;
-            });
-            let lenght = i + 4;
-            // Hiển thị 4 slides kế tiếp từ slideIndex
-            for (i; i < lenght; i++) {
-                this.features[i].isVisible = true;
-            }
-
-            // Tăng slideIndex sau mỗi lượt hiển thị
-            this.slideIndex = (this.slideIndex + 4);
-
-            // Thiết lập timeout để tự động chuyển slide sau 5 giây
-
-        }
+const features = ref([
+    { isVisible: true, image: "../assets/images/Item1.png", name: "Jordan", price: 500, rating: 1 },
+    { isVisible: false, image: "../assets/images/Item2.png", name: "Nike", price: 400, rating: 3.5 },
+    { isVisible: true, image: "../assets/images/Item1.png", name: "Jordan", price: 500, rating: 4 },
+    { isVisible: false, image: "../assets/images/Item2.png", name: "Nike", price: 400, rating: 2.5 },
+    { isVisible: true, image: "../assets/images/Item1.png", name: "Jordan", price: 500, rating: 4.5 },
+    { isVisible: false, image: "../assets/images/Item2.png", name: "Nike", price: 400, rating: 5 },
+    { isVisible: false, image: "../assets/images/Item2.png", name: "Nike", price: 400, rating: 2.5 },
+    { isVisible: true, image: "../assets/images/Item1.png", name: "Jordan", price: 500, rating: 4.5 },
+    { isVisible: false, image: "../assets/images/Item2.png", name: "Nike", price: 400, rating: 10 },
+    // Bổ sung các feature khác ở đây
+]);
 
 
 
-    }
-});
+// const numberOfDots = computed(() => {
+//     let dots = [];
+
+//     for (let i = 0; i + 3 < datas.value.length; i++) {
+//         dots.push(i);
+//     }
+//     return dots;
+// });
+
+// onMounted(() => {
+//     showSlides(slideIndex.value);
+// });
+
+// const currentSlide = (step, isClick) => {
+//     console.log(step)
+//     if (isClick) {
+
+//         showSlides(step)
+//     } else {
+//         if (slideIndex.value + 4 >= datas.value.length && step == 1) {
+//             slideIndex.value = 0;
+//             showSlides(slideIndex.value)
+//         } else if (slideIndex.value + step < 0 && step == -1) {
+//             slideIndex.value = datas.value.length - 4;
+//             showSlides(slideIndex.value)
+//         }
+//         else {
+//             showSlides(slideIndex.value + step);
+//         }
+//     }
+
+
+
+// };
+
+// const showSlides = (index) => {
+//     datas.value.forEach((feature) => {
+//         feature.isVisible = false;
+//     });
+//     console.log(index)
+//     let length = index + 4;
+//     slideIndex.value = index
+//     for (let i = slideIndex.value; i < length; i++) {
+//         if (i < datas.value.length) {
+//             datas.value[i].isVisible = true;
+//         }
+//     }
+
+
+// };
 </script>
 
 <style scoped>
@@ -168,10 +130,10 @@ export default defineComponent({
 
 .features {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     gap: 30px;
-    margin-top: 50px;
+    margin: 50px auto;
 
 }
 
@@ -192,7 +154,7 @@ export default defineComponent({
 
 }
 
-.rectangles {
+/* .rectangles {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -237,5 +199,5 @@ export default defineComponent({
     height: 8px;
     background-color: rgba(78, 74, 242, 1);
     border-radius: 25%;
-}
+} */
 </style>
